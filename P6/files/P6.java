@@ -217,7 +217,11 @@ public class P6 {
 	}
 
 	public static void main(String[] args) {
-		P6 instance = new P6(args);
-		instance.run();
+	    try {
+	      Codegen.p = new PrintWriter(args[1]); // we added
+	      P6 instance = new P6(args);
+	      instance.run();
+	      Codegen.p.close();
+	    } catch (FileNotFoundException e) {}
 	}
 }

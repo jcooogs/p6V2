@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
+import org.graalvm.compiler.core.common.spi.CodeGenProviders;
 
-//TODO commit and push
 
 // **********************************************************************
 // The ASTnode class defines the nodes of the abstract-syntax tree that
@@ -565,9 +565,8 @@ class VarDeclNode extends DeclNode {
     public void codeGen() {
       if (myId.sym().isGlobalVar) { //TODO might not work
         Codegen.generate(".data");
-        Codegen.generate(".align 4");
-        /*Codegen.generateLabeled(String label, String opcode,
-            String comment, String arg1); */
+        Codegen.generate(".align 2");
+        Codegen.generateLabeled("_" + myId.name(), "space 4", "");
       }
     }
 
@@ -689,7 +688,8 @@ class FnDeclNode extends DeclNode {
      * codeGen
      */
     public void codeGen() {
-      //
+      //preamble
+      CodeGen
     }
 
     // 4 kids
