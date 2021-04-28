@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.*;
-import org.graalvm.compiler.core.common.spi.CodeGenProviders;
 
 
 // **********************************************************************
@@ -211,6 +210,8 @@ class DeclListNode extends ASTnode {
         for (DeclNode node: myDecls) {
             if( node instanceof VarDeclNode) {//  || node instanceof FnDeclNode) {
                 ((VarDeclNode)node).codeGen();    
+            } else if ( node instanceof FnDeclNode) {
+              ((FnDeclNode)node).codeGen(); 
             }
         }
     }
@@ -688,8 +689,34 @@ class FnDeclNode extends DeclNode {
      * codeGen
      */
     public void codeGen() {
-      //preamble
-      CodeGen
+      //PREAMBLE
+      Codegen.generate(".text");
+      if (myId.name().equals("main")) {
+        Codegen.generate(".globl main");
+        Codegen.genLabel(myId.name());
+        Codegen.genLabel("__start");
+      } else {
+        Codegen.genLabel("_" + myId.name() + ":");
+      }
+      
+      //FUNCTION ENTRY
+      //push return address
+      Codegen.genPush(Codegen.RA);
+      //push control link
+      Codegen.genPush(Codegen.FP);
+      
+      int sizeParams = -myId.sym().offset;
+      
+      // make space for locals
+      Codegen.generate("subu", Codegen.SP, Codegen.SP, sizeParams - 8); //TODO is this right?
+      // set the framepointer
+      Codegen.generate("addu", Codegen.FP, Codegen.SP, sizeParams);
+      
+      //FUNCTION BODY
+      myBody.codeGen(); //TODO
+      
+      //FUNCTION EXIT
+      
     }
 
     // 4 kids
