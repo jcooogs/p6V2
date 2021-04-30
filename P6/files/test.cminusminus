@@ -1,5 +1,4 @@
-int x;
-
 void main() {
-	cout << 1;
+	cout << "Hello world!";
+	cout << "\n";
 }

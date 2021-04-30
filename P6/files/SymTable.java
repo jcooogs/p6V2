@@ -3,6 +3,7 @@ import java.util.*;
 public class SymTable {
   public int offset = 8;
   private List<HashMap<String, TSym>> list;
+  public String functionName;
 
   public SymTable() {
     list = new LinkedList<HashMap<String, TSym>>();
